@@ -154,3 +154,13 @@ echo "To use with Node.js viewer, run: source db_visualizer/postgres.env"
 echo "To connect to the database, use one of the following commands:"
 echo "psql -h localhost -U ${DB_USER} -d ${DB_NAME} -p ${DB_PORT}"
 echo "$(cat db_connection.txt)"
+
+# Run migrations after DB is ready and connection info is saved
+if [ -x "./migrate.sh" ]; then
+    echo ""
+    echo "Running schema migrations..."
+    ./migrate.sh || { echo "Migrations failed"; exit 1; }
+    echo "Migrations completed successfully."
+else
+    echo "migrate.sh not found or not executable; skipping migrations."
+fi
